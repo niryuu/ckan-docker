@@ -8,9 +8,13 @@ set -eu
 #   echo "Configuring custom options from $CONFIG_OPTIONS"
 
 #   # use the config-tool to set existing options based on the custom config file
-#   "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -f "$CKAN_CONFIG/$CONFIG_OPTIONS"
+#   # "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -f "$CKAN_CONFIG/$CONFIG_OPTIONS"
 #   # if you need to specify any dynamic IP addresses do it now
-#   "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -e \
-#       "ckan.harvest.mq.hostname = $REDIS_PORT_6379_TCP_ADDR" \
-#       "ckan.harvest.mq.port = $REDIS_PORT_6379_TCP_PORT"
+#   sed -i \
+#     -e "s&^ckan.harvest.mq.hostname.*&ckan.harvest.mq.hostname = ${REDIS_PORT_6379_TCP_ADDR}&" \
+#     -e "s&^ckan.harvest.mq.port.*&ckan.harvest.mq.port = ${REDIS_PORT_6379_TCP_PORT}&" \
+#     "${CONFIG}"
+#   #"$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -e \
+#   #    "ckan.harvest.mq.hostname = $REDIS_PORT_6379_TCP_ADDR" \
+#   #    "ckan.harvest.mq.port = $REDIS_PORT_6379_TCP_PORT"
 # fi

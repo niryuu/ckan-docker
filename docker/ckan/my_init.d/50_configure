@@ -21,19 +21,27 @@ abort () {
 write_config () {
   # update the config dynamic urls
   echo "Configuring dynamic URLs"
-  "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -e \
-      "ckan.site_url            = http://$(hostname -f):8080/" \
-      "sqlalchemy.url           = ${DATABASE_URL}" \
-      "solr_url                 = ${SOLR_URL}" \
-      "ckan.datastore.write_url = ${DATASTORE_WRITE_URL}" \
-      "ckan.datastore.read_url  = ${DATASTORE_READ_URL}" \
-      "ckan.datapusher.url      = ${DATAPUSHER_URL}"
+  #"$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -e \
+  #    "ckan.site_url            = http://$(hostname -f):8080/" \
+  #    "sqlalchemy.url           = ${DATABASE_URL}" \
+  #    "solr_url                 = ${SOLR_URL}" \
+  #    "ckan.datastore.write_url = ${DATASTORE_WRITE_URL}" \
+  #    "ckan.datastore.read_url  = ${DATASTORE_READ_URL}" \
+  #    "ckan.datapusher.url      = ${DATAPUSHER_URL}"
+  sed -i \
+    -e "s&^ckan.site_url.*&ckan.site_url            = http://$(hostname -f):8080/" \
+    -e "s&^sqlalchemy.url.*&sqlalchemy.url           = ${DATABASE_URL}" \
+    -e "s&^solr_url.*&solr_url                 = ${SOLR_URL}" \
+    -e "s&^ckan.datastore.write_url.*&ckan.datastore.write_url = ${DATASTORE_WRITE_URL}" \
+    -e "s&^ckan.datastore.read_url/*&ckan.datastore.read_url  = ${DATASTORE_READ_URL}" \
+    -e "s&^ckan.datapusher.url.*&ckan.datapusher.url      = ${DATAPUSHER_URL}" \
+    "${CONFIG}"
 
   # apply any custom options
-  if [ -e "$CKAN_CONFIG/$CONFIG_OPTIONS" ]; then
-    echo "Configuring custom options from $CONFIG_OPTIONS"
-    "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -f "$CKAN_CONFIG/$CONFIG_OPTIONS"
-  fi
+  #if [ -e "$CKAN_CONFIG/$CONFIG_OPTIONS" ]; then
+  #  echo "Configuring custom options from $CONFIG_OPTIONS"
+  #  "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -f "$CKAN_CONFIG/$CONFIG_OPTIONS"
+  #fi
 }
 
 link_postgres_url () {
